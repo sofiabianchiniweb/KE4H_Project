@@ -1,0 +1,30 @@
+# Enrichment of the Tempio Malatestiano (Rimini) in the ArCo Knowledge Graph
+# KE4H project - Sofia Bianchini
+
+@prefix a-cd: <https://w3id.org/arco/ontology/context-description/> .
+@prefix l0: <https://w3id.org/italia/onto/l0/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Triple 1 – Authorship
+<https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046>
+    a-cd:hasAuthor <https://w3id.org/arco/resource/Agent/leon-battista-alberti> .
+
+<https://w3id.org/arco/resource/Agent/leon-battista-alberti>
+    a l0:Agent ;
+    rdfs:label "Leon Battista Alberti"@it .
+
+# Triple 2 – Commission
+<https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046>
+    a-cd:hasCommission <https://w3id.org/arco/resource/Commission/0800163046-commission-1> .
+
+<https://w3id.org/arco/resource/Commission/0800163046-commission-1>
+    a a-cd:Commission ;
+    a-cd:hasCommittent <https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta> .
+
+<https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta>
+    a l0:Agent ;
+    rdfs:label "Sigismondo Pandolfo Malatesta"@it .
+
+# Triple 3 – Description
+<https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046>
+    rdfs:comment "Il Tempio Malatestiano fu progettato da Leon Battista Alberti, che si ispirò all'Arco d'Augusto e al Ponte di Tiberio, e commissionato da Sigismondo Pandolfo Malatesta come monumento alla propria famiglia. I lavori iniziarono nel 1447 e rimasero incompiuti alla morte di Sigismondo nel 1468. Le decorazioni furono realizzate da Agostino di Duccio e Matteo de' Pasti; l'edificio custodisce inoltre un Crocifisso di Giotto e un affresco di Piero della Francesca."@it .
