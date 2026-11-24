@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tempio Malatestiano &ndash; KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="sparql.html">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>Tempio Malatestiano</h1>
+
+    <p><em>Connecting Cultural Heritage, Semantic Web and Artificial Intelligence</em></p>
+    <p><img src="images/tempio-malatestiano.jpg" class="main-photo" alt="Tempio Malatestiano, Rimini" /></p>
+    <h2>Abstract</h2>
+    <p>This project explores the intersection of Semantic Web technologies, Artificial Intelligence and Cultural Heritage, focusing on the <a href="https://en.wikipedia.org/wiki/Tempio_Malatestiano" target="_blank">Tempio Malatestiano</a> in <a href="https://en.wikipedia.org/wiki/Rimini" target="_blank">Rimini</a>, Italy. By combining SPARQL queries and Large Language Models (LLMs), the project identifies and addresses selected information gaps in <a href="https://w3id.org/arco" target="_blank">ArCo</a>, the Italian Cultural Heritage Knowledge Graph. The SPARQL exploration showed that ArCo describes the monument mainly through cataloguing data, while it does not record who designed it or who commissioned it. I used ChatGPT and Gemini, with three prompting techniques, to research this missing knowledge, and then translated the selected information into RDF triples based on ArCo's ontologies, providing a richer representation of the monument's historical context, architectural authorship and commission.</p>
+    <h2>Introduction</h2>
+    <p>This project was developed within the KE4H (Knowledge Engineering for the Humanities) course at the <a href="https://www.unibo.it/en" target="_blank">University of Bologna</a>.</p>
+    <p>The main objective is to explore how SPARQL queries and LLMs can be combined to enrich existing cultural heritage knowledge graphs with additional meaningful information. In particular, the project investigates how semantic technologies and AI-assisted approaches can help identify gaps in structured data and contribute to a more complete representation of cultural heritage.</p>
+    <p>As the reference knowledge graph, I selected ArCo – Architecture of Knowledge, the official ontology network and RDF dataset for the Italian cultural heritage domain, developed by the <a href="https://www.iccd.beniculturali.it" target="_blank">Central Institute for Cataloguing and Documentation (ICCD)</a> in collaboration with the <a href="https://www.cnr.it/en" target="_blank">National Research Council of Italy (CNR)</a>.</p>
+    <p>ArCo represents cultural properties and their related information through a network of interconnected ontologies. Its RDF data can be explored through <a href="https://dati.cultura.gov.it/sparql" target="_blank">SPARQL queries</a>, which allow users to retrieve, analyse and connect information about cultural heritage assets.</p>
+    <h2>The Cultural Heritage: Tempio Malatestiano</h2>
+    <p>The project focuses on the Tempio Malatestiano, located in the historic centre of Rimini, in the Emilia-Romagna region of Italy, and today the city's cathedral. Originally a Franciscan church dedicated to Saint Francis, the building was transformed during the fifteenth century under the patronage of <a href="https://en.wikipedia.org/wiki/Sigismondo_Pandolfo_Malatesta" target="_blank">Sigismondo Pandolfo Malatesta</a>, Lord of Rimini.</p>
+    <p>The architectural redesign is closely associated with <a href="https://en.wikipedia.org/wiki/Leon_Battista_Alberti" target="_blank">Leon Battista Alberti</a>, one of the leading architects and humanist thinkers of the Italian Renaissance. The monument is renowned for its marble exterior, inspired by classical Roman architecture, which reinterprets the language of ancient triumphal arches. Its artistic heritage also includes the sculptural decorations by <a href="https://en.wikipedia.org/wiki/Agostino_di_Duccio" target="_blank">Agostino di Duccio</a>, the fresco by <a href="https://en.wikipedia.org/wiki/Piero_della_Francesca" target="_blank">Piero della Francesca</a> depicting Sigismondo Malatesta in prayer before Saint Sigismund, and a painted Crucifix attributed to <a href="https://en.wikipedia.org/wiki/Giotto" target="_blank">Giotto</a>.</p>
+    <p>Beyond its architectural and artistic value, the Tempio Malatestiano is an important expression of Renaissance humanism and political self-representation. Conceived as both a religious building and a commemorative monument, it reflects Sigismondo Malatesta's ambition to celebrate his family, his political prestige and his relationship with <a href="https://en.wikipedia.org/wiki/Isotta_degli_Atti" target="_blank">Isotta degli Atti</a>.</p>
+    <p>The combination of classical architecture, Christian imagery, humanistic culture and dynastic symbolism makes the Tempio Malatestiano a particularly interesting case study for exploring how complex historical and cultural information can be represented through semantic technologies.</p>
+    <h2>Project Focus and Objectives</h2>
+    <p>Starting from the existing ArCo representation of the Tempio Malatestiano, the project identifies information that could be added to the knowledge graph. Particular attention is given to the monument's architectural authorship and historical commission: the role of Leon Battista Alberti and the patronage of Sigismondo Pandolfo Malatesta.</p>
+    <p>The methodology combines SPARQL-based data exploration, historical research and LLM-assisted knowledge extraction, comparing the answers of ChatGPT and Gemini across three prompting techniques. The resulting information is translated into RDF statements using the appropriate ArCo ontological properties, with the aim of improving the semantic richness and contextual completeness of the existing representation.</p>
+    <p>Through this process, the project shows how Semantic Web technologies and AI tools can contribute to the documentation, interpretation and accessibility of Italian cultural heritage.</p>
+    <h2>Project Author</h2>
+    <p><img src="images/sofia-bianchini.jpg" class="author-photo" alt="Sofia Bianchini" /></p>
+    <p><strong>Sofia Bianchini</strong> – Project Author</p>
+    <p>Language, Society and Communication – University of Bologna</p>
+    <p>Repository: <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">github.com/sofiabianchiniweb/KE4H_Project</a></p>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <span></span>
+      <a href="methodology.html">Methodology &rarr;</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>

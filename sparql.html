@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPARQL Queries &amp; Results &ndash; Tempio Malatestiano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="sparql.html" class="active">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>SPARQL Queries &amp; Results</h1>
+
+    <p>To find out how the Tempio Malatestiano is represented in ArCo, I queried the knowledge graph through the official <a href="https://dati.cultura.gov.it/sparql" target="_blank">ArCo SPARQL endpoint</a>. The queries follow the logic of my research: first I located the monument and its related resources, then I looked at the information attached to it, and finally I verified which historical and artistic aspects are missing. Each query can be copied and run directly in the endpoint.</p>
+    <p>Together, the queries use all the SPARQL keywords required by the project: DISTINCT, FILTER and REGEX, LIMIT, UNION, OPTIONAL and ORDER BY.</p>
+    <h2>Query 1 – Does ArCo contain the Tempio Malatestiano?</h2>
+    <p>Before looking for gaps, I needed to know whether my monument was present in ArCo and which resources were associated with it. I therefore searched for every resource whose label contains the words "Tempio Malatestiano".</p>
+    <p><strong>Explanation of keywords used:</strong></p>
+    <ul>
+    <li><strong>rdfs:label</strong>: retrieves the name associated with each resource.</li>
+    <li><strong>FILTER(REGEX(...))</strong>: keeps only the labels containing "Tempio Malatestiano"; the "i" flag makes the search case-insensitive.</li>
+    <li><strong>DISTINCT</strong>: removes duplicate results.</li>
+    <li><strong>LIMIT 10</strong>: returns at most 10 results.</li>
+    </ul>
+    <p><strong>SPARQL Query:</strong></p>
+    <pre class="code"><code>PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX arco: &lt;https://w3id.org/arco/ontology/arco/&gt;
+
+SELECT DISTINCT ?culturalProperty ?label
+WHERE {
+  ?culturalProperty rdfs:label ?label .
+  FILTER(REGEX(?label, &quot;Tempio Malatestiano&quot;, &quot;i&quot;))
+}
+LIMIT 10</code></pre>
+    <h3>✅ Results</h3>
+    <p>The query returned 10 rows, confirming that the Tempio Malatestiano is represented in ArCo. The rows did not refer to a single resource: besides the building itself, they included two catalogue records of the Tempio as a cultural site, two 20th-century posters showing the façade, and the titles of posters of the music festival held in the Tempio ("Sagra Musicale"). Some resources appear twice, because their label is recorded both in Italian (@it) and in English (@en): DISTINCT does not merge them, because the two labels have different language tags.</p>
+    <p><strong>Main IRIs found:</strong></p>
+    <ul>
+    <li><a href="https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046" target="_blank">https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046</a> – "Tempio Malatestiano (Chiesa) - RIMINI (RN)": the architectural heritage record of the building, which became the main subject of my investigation and of my RDF triples.</li>
+    <li><a href="http://dati.beniculturali.it/iccd/schede/resource/CulturalInstituteOrSite/S015002_Tempio_Malatestiano" target="_blank">http://dati.beniculturali.it/iccd/schede/resource/CulturalInstituteOrSite/S015002_Tempio_Malatestiano</a> – the Tempio as a cultural site.</li>
+    <li><a href="https://w3id.org/arco/resource/HistoricOrArtisticProperty/0500657444" target="_blank">https://w3id.org/arco/resource/HistoricOrArtisticProperty/0500657444</a> – a 20th-century poster showing the façade of the Tempio and a detail of Piero della Francesca's fresco.</li>
+    </ul>
+    <p><img src="images/query1-results.png" alt="Results of Query 1" /></p>
+    <h2>Query 2 – Alternative names of the monument</h2>
+    <p>The Tempio Malatestiano is also known as the Church of San Francesco, its original Franciscan dedication. To check whether ArCo records the monument under both names, I combined them in a single query and also asked for a textual description, when available.</p>
+    <p>My first version searched both names among all the labels in ArCo, but the endpoint always stopped with the error "Transaction timed out": the query was too heavy (see <a href="challenges.html">Challenges &amp; Solutions</a>). I therefore made it lighter by searching only among architectural heritage records and, for the name "San Francesco", only among those located in Rimini.</p>
+    <p><strong>Explanation of keywords used:</strong></p>
+    <ul>
+    <li><strong>a arco:ArchitecturalOrLandscapeHeritage</strong>: keeps only resources of type architectural heritage (buildings), which makes the search faster.</li>
+    <li><strong>UNION</strong>: combines two search patterns, so resources matching either name are returned.</li>
+    <li><strong>FILTER(REGEX(...) &amp;&amp; REGEX(...))</strong>: the symbol &amp;&amp; means "and": in the second pattern a label must contain both "San Francesco" and "Rimini".</li>
+    <li><strong>OPTIONAL</strong>: adds the description when it exists, without excluding resources that have none.</li>
+    <li><strong>rdfs:comment</strong>: retrieves a short textual description of the resource.</li>
+    <li><strong>DISTINCT</strong>: removes duplicate results.</li>
+    <li><strong>ORDER BY DESC(?label)</strong>: sorts the results by label in reverse alphabetical order.</li>
+    <li><strong>LIMIT 30</strong>: returns at most 30 results.</li>
+    </ul>
+    <p><strong>SPARQL Query:</strong></p>
+    <pre class="code"><code>PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX arco: &lt;https://w3id.org/arco/ontology/arco/&gt;
+
+SELECT DISTINCT ?culturalProperty ?label ?description
+WHERE {
+  {
+    ?culturalProperty a arco:ArchitecturalOrLandscapeHeritage ;
+        rdfs:label ?label .
+    FILTER(REGEX(?label, &quot;Tempio Malatestiano&quot;, &quot;i&quot;))
+  }
+  UNION
+  {
+    ?culturalProperty a arco:ArchitecturalOrLandscapeHeritage ;
+        rdfs:label ?label .
+    FILTER(REGEX(?label, &quot;San Francesco&quot;, &quot;i&quot;) &amp;&amp; REGEX(?label, &quot;Rimini&quot;, &quot;i&quot;))
+  }
+  OPTIONAL { ?culturalProperty rdfs:comment ?description }
+}
+ORDER BY DESC(?label)
+LIMIT 30</code></pre>
+    <h3>✅ Results</h3>
+    <p>The query returned only two buildings, each listed twice because its label is recorded in Italian and in English:</p>
+    <ul>
+    <li><a href="https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046" target="_blank">https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046</a> – "Tempio Malatestiano (Chiesa) - RIMINI (RN)", with the description "Chiesa, Tempio Malatestiano";</li>
+    <li><a href="https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163044" target="_blank">https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163044</a> – "Ex Convento di San Francesco (convento) - RIMINI (RN)", with the description "convento, Ex Convento di San Francesco".</li>
+    </ul>
+    <p>This result was useful in two ways. First, it showed that in ArCo the church is catalogued only under the name "Tempio Malatestiano": the name "San Francesco" refers to a different building, the former Franciscan convent, which has its own record. This confirmed that the IRI found in Query 1 is the right one for my project. Second, it showed that both records have only a very short description, which states the type of building and its name.</p>
+    <p><img src="images/query2-results.png" alt="Results of Query 2" /></p>
+    <h2>Query 3 – A first look at the existing data</h2>
+    <p>After locating the monument, I tried to "open" its record and see which properties and values ArCo stores about it. To isolate the building from photographs and documents, the query keeps only the labels that contain both "Tempio Malatestiano" and "chiesa".</p>
+    <p><strong>Explanation of keywords used:</strong></p>
+    <ul>
+    <li><strong>?property ?value</strong>: retrieves every property linked to the resource and its value.</li>
+    <li><strong>FILTER(REGEX(...))</strong>: two filters are combined, so a label must contain both expressions.</li>
+    <li><strong>DISTINCT</strong>: avoids duplicate property–value pairs.</li>
+    <li><strong>LIMIT 50</strong>: returns at most 50 rows.</li>
+    </ul>
+    <p><strong>SPARQL Query:</strong></p>
+    <pre class="code"><code>PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX arco: &lt;https://w3id.org/arco/ontology/arco/&gt;
+
+SELECT DISTINCT ?culturalProperty ?property ?value
+WHERE {
+  ?culturalProperty rdfs:label ?label ;
+      ?property ?value .
+  FILTER(REGEX(?label, &quot;Tempio Malatestiano&quot;, &quot;i&quot;))
+  FILTER(REGEX(?label, &quot;chiesa&quot;, &quot;i&quot;))
+}
+LIMIT 50</code></pre>
+    <h3>❌ Results</h3>
+    <p>In the 50 rows returned, the only property was rdf:type, which states what kind of resource it is but says nothing about its history or artistic features. Looking at the first column, I also noticed that the rows did not concern only the building: many of them referred to drawings and photographs whose labels also contain the words "Tempio Malatestiano" and "chiesa".</p>
+    <p>This result raised a first suspicion that the record was incomplete, but it was not conclusive: a query based on text filters depends on how labels are written, and its first 50 rows do not necessarily show the whole record.</p>
+    <p><img src="images/query3-results.png" alt="Results of Query 3" /></p>
+    <h2>Query 4 – Checking authorship and description</h2>
+    <p>To test the suspicion, I asked ArCo directly for the author and the description of the resources found with the same filters. Using OPTIONAL, the query does not fail if the information is missing: it returns empty cells.</p>
+    <p><strong>Explanation of keywords used:</strong></p>
+    <ul>
+    <li><strong>OPTIONAL</strong>: retrieves the author and the description only if they exist; empty cells mean the information is absent.</li>
+    <li><strong>a-cd:hasAuthor</strong>: links a cultural property to its author (ArCo Context Description module).</li>
+    <li><strong>rdfs:comment</strong>: retrieves the textual description.</li>
+    </ul>
+    <p><strong>SPARQL Query:</strong></p>
+    <pre class="code"><code>PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX arco: &lt;https://w3id.org/arco/ontology/arco/&gt;
+PREFIX a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt;
+
+SELECT ?author ?description
+WHERE {
+  ?culturalProperty rdfs:label ?label .
+  FILTER(REGEX(?label, &quot;Tempio Malatestiano&quot;, &quot;i&quot;))
+  FILTER(REGEX(?label, &quot;chiesa&quot;, &quot;i&quot;))
+  OPTIONAL { ?culturalProperty a-cd:hasAuthor ?author }
+  OPTIONAL { ?culturalProperty rdfs:comment ?description }
+}
+LIMIT 10</code></pre>
+    <h3>⚠️ Results</h3>
+    <p>The rows containing the description of the building ("Chiesa, Tempio Malatestiano") had no author. However, other rows returned two author IRIs. Opening them in the browser, I found that they do not refer to the architect of the Tempio:</p>
+    <ul>
+    <li><a href="https://w3id.org/arco/resource/Agent/99167322489a0aba4e0cfef5327a09dc" target="_blank">Agent/99167322489a0aba4e0cfef5327a09dc</a> – "Anonimo italiano (XX)", an anonymous 20th-century author;</li>
+    <li><a href="https://w3id.org/arco/resource/Agent/c315ed6515cb877a72a487da5b87667d" target="_blank">Agent/c315ed6515cb877a72a487da5b87667d</a> – "Pavan, Luigi", active in the second half of the 20th century.</li>
+    </ul>
+    <p>These are the authors of 20th-century drawings and documents about the Tempio, not of the building itself. Because the query selects resources through their labels, it also captured other records whose labels contain the same words. This showed me that, to verify what ArCo says about the monument, I had to query its record directly through its IRI.</p>
+    <p><img src="images/query4-results.png" alt="Results of Query 4" /></p>
+    <h2>Query 5 – Inspecting the full record through its IRI</h2>
+    <p>I queried the monument directly through the IRI found in Query 1. This way the result no longer depends on text filters and shows every property ArCo stores about the building.</p>
+    <p><strong>Explanation of keywords used:</strong></p>
+    <ul>
+    <li><strong>VALUES ?tempio</strong>: fixes the variable ?tempio to the monument's IRI, so the query retrieves all the properties and values of that resource only.</li>
+    <li><strong>DISTINCT</strong>: avoids duplicate rows.</li>
+    <li><strong>ORDER BY ?property</strong>: groups the rows by property, which makes the record easier to read.</li>
+    </ul>
+    <p><strong>SPARQL Query:</strong></p>
+    <pre class="code"><code>SELECT DISTINCT ?property ?value
+WHERE {
+  VALUES ?tempio {
+    &lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+  }
+  ?tempio ?property ?value .
+}
+ORDER BY ?property</code></pre>
+    <h3>✅ Results</h3>
+    <p>The record turned out to be richer than Query 3 suggested. ArCo stores, among other things:</p>
+    <ul>
+    <li>the title, the catalogue identifiers and the type of building (Chiesa);</li>
+    <li>the dating (a-cd:hasDating) and the façade as a construction element (a-cs:hasConstructionElement);</li>
+    <li>the location, the address and the legal situation of the property;</li>
+    <li>the historical designation "Tempio Malatestiano" (a-dd:hasDesignationInTime);</li>
+    <li>a large photographic documentation and links to the official catalogue record.</li>
+    </ul>
+    <p>However, the record contains no property describing who designed the building or who commissioned it.</p>
+    <p><img src="images/query5-results.png" alt="Results of Query 5" /></p>
+    <p>The record contains too many rows to fit in a single screenshot: the complete list of results is available <a href="https://dati.cultura.gov.it/sparql?default-graph-uri=&amp;query=SELECT+DISTINCT+%3Fproperty+%3Fvalue%0D%0AWHERE+%7B%0D%0A++VALUES+%3Ftempio+%7B%0D%0A++++%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fresource%2FArchitecturalOrLandscapeHeritage%2F0800163046%3E%0D%0A++%7D%0D%0A++%3Ftempio+%3Fproperty+%3Fvalue+.%0D%0A%7D%0D%0AORDER+BY+%3Fproperty&amp;format=text%2Fhtml&amp;timeout=0&amp;signal_void=on" target="_blank">here</a>.</p>
+    <h2>Query 6 – Confirming the gap</h2>
+    <p>Finally, I wrote a targeted query asking ArCo, for the monument's IRI only, for its author, its authorship attribution, its commission and its description, using the properties of the <a href="https://w3id.org/arco/ontology/context-description" target="_blank">Context Description</a> module.</p>
+    <p><strong>Explanation of keywords used:</strong></p>
+    <ul>
+    <li><strong>VALUES ?tempio</strong>: assigns the monument's IRI to the variable ?tempio, so it does not have to be repeated in every line.</li>
+    <li><strong>?tempio rdfs:label ?label</strong>: a required pattern that retrieves the name of the monument, so that the query always returns at least one row.</li>
+    <li><strong>OPTIONAL</strong>: each property is requested in its own optional block; empty cells mean the information is absent.</li>
+    <li><strong>a-cd:hasAuthor / a-cd:hasAuthorshipAttribution</strong>: link a cultural property to its author or to an authorship attribution.</li>
+    <li><strong>a-cd:hasCommission</strong>: links a cultural property to its commission.</li>
+    </ul>
+    <p><strong>SPARQL Query:</strong></p>
+    <pre class="code"><code>PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt;
+
+SELECT ?label ?author ?authorship ?commission ?description
+WHERE {
+  VALUES ?tempio {
+    &lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+  }
+  ?tempio rdfs:label ?label .
+  OPTIONAL { ?tempio a-cd:hasAuthor ?author }
+  OPTIONAL { ?tempio a-cd:hasAuthorshipAttribution ?authorship }
+  OPTIONAL { ?tempio a-cd:hasCommission ?commission }
+  OPTIONAL { ?tempio rdfs:comment ?description }
+}</code></pre>
+    <h3>❌ Results</h3>
+    <p>The query returns the label of the monument (in Italian and in English) and its description, "Chiesa, Tempio Malatestiano". The columns for author, authorship attribution and commission are empty: ArCo records neither Leon Battista Alberti as the architect of the Tempio Malatestiano nor Sigismondo Pandolfo Malatesta as the patron who commissioned its transformation.</p>
+    <p><img src="images/query6-results.png" alt="Results of Query 6" /></p>
+    <h2>Identifying the Information Gap</h2>
+    <p>Comparing the query results with historical and art-historical sources, I identified the following missing information:</p>
+    <table>
+    <thead>
+    <tr>
+    <th>Gap</th>
+    <th>Evidence from the queries</th>
+    <th>What is missing</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><strong>Authorship</strong></td>
+    <td>No a-cd:hasAuthor or authorship attribution on the monument's record (Queries 5–6)</td>
+    <td>Leon Battista Alberti, who designed the Renaissance exterior from around 1450</td>
+    </tr>
+    <tr>
+    <td><strong>Commission</strong></td>
+    <td>No a-cd:hasCommission on the record (Queries 5–6)</td>
+    <td>Sigismondo Pandolfo Malatesta, Lord of Rimini, who transformed the church into a dynastic monument</td>
+    </tr>
+    <tr>
+    <td><strong>Description</strong></td>
+    <td>The only rdfs:comment is "Chiesa, Tempio Malatestiano" (Queries 2 and 6)</td>
+    <td>The historical and artistic context: humanist programme, reliefs by Agostino di Duccio, works by Piero della Francesca and Giotto</td>
+    </tr>
+    </tbody>
+    </table>
+    <p>I chose to focus on authorship and commission, because they are central to the identity of the monument and can be modelled with existing ArCo properties, and on a short description of its context. These became the starting point for the LLM-assisted research described in the next section, <a href="prompts.html">LLM Prompts</a>.</p>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <a href="methodology.html">&larr; Methodology</a>
+      <a href="prompts.html">LLM Prompts &rarr;</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>

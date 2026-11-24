@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology &ndash; Tempio Malatestiano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="methodology.html" class="active">Methodology</a></li>
+        <li><a href="sparql.html">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>Methodology</h1>
+
+    <p>The project was carried out through a combination of semantic data analysis, historical research and AI-assisted investigation, with the aim of improving the representation of the Tempio Malatestiano of Rimini within the ArCo Knowledge Graph.</p>
+    <h2>Research Process</h2>
+    <h3>1. Cultural Heritage Selection</h3>
+    <p>I selected the Tempio Malatestiano as the subject of my research, considering its historical significance, architectural features and rich cultural heritage.</p>
+    <h3>2. Data Exploration</h3>
+    <p>I examined the monument's existing representation in ArCo by running SPARQL queries on the ArCo endpoint, in order to retrieve the available information and see how its characteristics were described within the knowledge graph.</p>
+    <h3>3. Gap Analysis</h3>
+    <p>By comparing the retrieved data with historical and art-historical information, I identified aspects of the monument that were missing or insufficiently represented in the dataset. The gap was confirmed by querying the monument directly through its IRI.</p>
+    <h3>4. AI-Assisted Research</h3>
+    <p>I used ChatGPT and Gemini to research the missing information. I submitted the same prompts to both models, applying three prompting techniques (zero-shot, few-shot and chain-of-thought), and compared their answers in terms of content, accuracy and style.</p>
+    <h3>5. RDF Modelling and Enrichment</h3>
+    <p>After reviewing the information collected, I selected the relevant facts and converted them into RDF triples in Turtle format, using ArCo's ontological structure and properties to ensure compatibility with the existing knowledge graph. The triples were generated with the help of both LLMs and then checked for syntax and consistency with ArCo.</p>
+    <h3>6. Project Presentation</h3>
+    <p>The final stage involved developing this website through GitHub Pages, to document the research process, illustrate the proposed enrichments and present the results in an accessible way.</p>
+    <h2>How the Gap Was Identified</h2>
+    <p>In a knowledge graph, a gap does not simply mean that a text is missing. Information is stored as triples (subject – predicate – object), so a gap means that statements the ontology could express are absent from the record of a resource. While exploring ArCo, I looked for two kinds of gap:</p>
+    <ul>
+    <li><strong>Descriptive gap:</strong> the record contains no detailed textual description. For the Tempio Malatestiano, the only description (rdfs:comment) is the short string "Chiesa, Tempio Malatestiano".</li>
+    <li><strong>Relational gap:</strong> the record lacks links to other entities. The monument is not connected to its architect (a-cd:hasAuthor) or to its commission (a-cd:hasCommission), both defined in ArCo's Context Description module.</li>
+    </ul>
+    <p>The <a href="sparql.html">SPARQL Queries &amp; Results</a> page shows step by step how these gaps emerged and how they were confirmed.</p>
+    <h2>Tools</h2>
+    <ul>
+    <li><a href="https://w3id.org/arco" target="_blank">ArCo Knowledge Graph and ontologies</a>: the knowledge graph explored and enriched in the project.</li>
+    <li><a href="https://dati.cultura.gov.it/sparql" target="_blank">ArCo SPARQL endpoint</a>: used to run all the SPARQL queries.</li>
+    <li><a href="https://chatgpt.com" target="_blank">ChatGPT</a> (OpenAI, free plan) and <a href="https://gemini.google.com" target="_blank">Gemini</a> (Google, Auto mode): the two LLMs compared in the project.</li>
+    <li><a href="https://rdflib.readthedocs.io" target="_blank">rdflib</a>: a Python library for RDF, used to check the syntax of the RDF triples.</li>
+    <li><a href="https://pages.github.com" target="_blank">GitHub Pages</a>: used to publish this website.</li>
+    </ul>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <a href="index.html">&larr; Home</a>
+      <a href="sparql.html">SPARQL Queries &amp; Results &rarr;</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>

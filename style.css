@@ -1,0 +1,245 @@
+/* =========================================================
+   Style sheet for the KE4H project website
+   The same file is used by all the pages of the site.
+   ========================================================= */
+
+/* ---------- General settings ---------- */
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #34343c;
+  background-color: #ffffff;
+}
+
+a {
+  color: #0056b2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Sidebar menu (left side, fixed) ---------- */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 40px 20px;
+  background-color: #f6f8fa;
+  border-right: 1px solid #e3e5e7;
+  text-align: center;
+}
+
+.avatar {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;           /* round picture */
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.site-title {
+  margin: 15px 0 0 0;
+  font-size: 22px;
+  font-weight: bold;
+  color: #34343c;
+}
+
+.site-subtitle {
+  margin: 5px 0 30px 0;
+  font-size: 14px;
+  font-style: italic;
+  color: #6c757d;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.sidebar li a {
+  display: block;
+  padding: 8px 15px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.sidebar li a:hover {
+  background-color: #e9ecef;
+  color: #34343c;
+  text-decoration: none;
+}
+
+/* the page that is currently open */
+.sidebar li a.active {
+  background-color: #dbe4f0;
+  color: #0056b2;
+}
+
+.sidebar-link {
+  margin-top: 30px;
+  font-size: 14px;
+}
+
+/* ---------- Page content ---------- */
+
+main {
+  margin-left: 260px;           /* leaves space for the sidebar */
+  max-width: 900px;
+  padding: 40px 50px;
+}
+
+h1 {
+  font-size: 34px;
+  margin-top: 0;
+  color: #2a2a2a;
+}
+
+h2 {
+  font-size: 26px;
+  margin-top: 45px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e3e5e7;
+  color: #2a2a2a;
+}
+
+h3 {
+  font-size: 20px;
+  margin-top: 30px;
+  color: #2a2a2a;
+}
+
+img {
+  max-width: 100%;              /* pictures never exceed the page width */
+  border: 1px solid #e3e5e7;
+  border-radius: 6px;
+}
+
+.main-photo {
+  width: 520px;
+}
+
+.author-photo {
+  width: 200px;
+}
+
+blockquote {
+  margin: 20px 0;
+  padding: 5px 20px;
+  border-left: 4px solid #c4c8cc;
+  color: #5a5a5a;
+}
+
+/* ---------- Code (SPARQL queries, RDF triples, prompts) ---------- */
+
+pre.code {
+  background-color: #f6f8fa;
+  border: 1px solid #e3e5e7;
+  border-radius: 6px;
+  padding: 15px;
+  overflow-x: auto;             /* long lines can be scrolled */
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* prompts are text, so long lines go to a new line */
+pre.prompt-text {
+  white-space: pre-wrap;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+/* ---------- Coloured boxes ---------- */
+
+.box {
+  margin: 20px 0;
+  padding: 10px 20px;
+  border-left: 5px solid;
+  border-radius: 6px;
+}
+
+.prompt {                       /* prompts given to the LLMs */
+  background-color: #e8f1fb;
+  border-color: #0070cb;
+}
+
+.note {                         /* useful information */
+  background-color: #e9f6ec;
+  border-color: #28a745;
+}
+
+.todo {                         /* parts still to be completed */
+  background-color: #fff8e1;
+  border-color: #ffc107;
+}
+
+/* ---------- Tables ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 15px;
+}
+
+th, td {
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f6f8fa;
+}
+
+/* ---------- Previous / next links and footer ---------- */
+
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid #e3e5e7;
+  font-weight: 600;
+}
+
+footer {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* ---------- Small screens (smartphones) ---------- */
+
+@media (max-width: 800px) {
+  .sidebar {
+    position: static;           /* the menu goes on top of the page */
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #e3e5e7;
+  }
+
+  main {
+    margin-left: 0;
+    padding: 25px 20px;
+  }
+}

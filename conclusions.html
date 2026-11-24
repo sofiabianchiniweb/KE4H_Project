@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conclusions &ndash; Tempio Malatestiano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="sparql.html">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html" class="active">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>Conclusions</h1>
+
+    <p>This project explored how SPARQL queries and Large Language Models can be combined to enrich ArCo, the Italian Cultural Heritage Knowledge Graph, taking the Tempio Malatestiano of Rimini as a case study.</p>
+    <h2>Results</h2>
+    <p>Through six SPARQL queries, using all the required keywords, I showed that ArCo describes the Tempio mainly through cataloguing data, while it does not record who designed it, who commissioned it, or its historical and artistic context. I researched this missing knowledge with ChatGPT and Gemini, using three prompting techniques, and verified the selected facts against an official source. Finally, I translated them into three RDF triples based on ArCo's ontology: the authorship of Leon Battista Alberti, the commission of Sigismondo Pandolfo Malatesta and a description of the monument.</p>
+    <h2>What I learned</h2>
+    <ul>
+    <li><strong>Knowledge graphs require careful reading.</strong> Query results depend on how data is catalogued and on how the query is written: a gap must be demonstrated on the right resource, through its IRI.</li>
+    <li><strong>LLMs are useful research assistants, but not reliable sources.</strong> Gemini was better at discovering details and knew ArCo's ontology better; ChatGPT was more careful in separating facts from interpretations and always produced valid Turtle. Both made mistakes: in the texts, interpretations presented as facts and, in some runs, factual errors; in the RDF code, properties that do not exist in ArCo.</li>
+    <li><strong>Prompting techniques shape the answers.</strong> Few-shot and chain-of-thought prompts produced richer and more structured answers than zero-shot prompts, and few-shot examples removed syntax errors in the RDF generation. More structure, however, did not always mean more accuracy.</li>
+    <li><strong>Human verification is essential.</strong> Every result had to be checked on three levels: the syntax of the code, its consistency with the ontology and the truth of the facts.</li>
+    </ul>
+    <h2>Limits and future developments</h2>
+    <p>The triples cannot be written directly into ArCo's official database, which is managed by the Ministry of Culture: they are published as a Turtle file that can be loaded together with ArCo's data. The enrichment is also limited to three triples, chosen to cover the main gaps identified.</p>
+    <p>Future work could link the Tempio to the artworks it houses, such as Giotto's Crucifix and Piero della Francesca's fresco, if they are catalogued in ArCo; describe the materials of the façade with the Denotative Description module, after checking the existing façade record; and add an English version of the description.</p>
+    <p>Overall, the project shows that Semantic Web technologies and AI tools can work together to make cultural heritage data richer and more accessible, as long as human knowledge and critical judgement remain at the centre of the process.</p>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <a href="challenges.html">&larr; Challenges &amp; Solutions</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>

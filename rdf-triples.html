@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filling the Gaps: RDF Triples &ndash; Tempio Malatestiano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="sparql.html">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html" class="active">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>Filling the Gaps: RDF Triples</h1>
+
+    <p>The last step was to translate the verified information into RDF triples that could be added to ArCo. I created three triples, one for each gap identified with SPARQL:</p>
+    <ul>
+    <li><strong>Authorship:</strong> the Tempio linked to its architect, Leon Battista Alberti (a-cd:hasAuthor);</li>
+    <li><strong>Commission:</strong> the Tempio linked to its commission by Sigismondo Pandolfo Malatesta (a-cd:hasCommission);</li>
+    <li><strong>Description:</strong> a historical and artistic description of the Tempio (rdfs:comment).</li>
+    </ul>
+    <p>The first two triples link the monument to other resources through IRIs, while the third adds a text (a literal). In this way the enrichment covers both kinds of object an RDF triple can have.</p>
+    <p>I submitted the same three prompts, in the same order, to ChatGPT and Gemini, each in a new chat. The first prompt is zero-shot; the second and third are few-shot, and each example is the correct result of the previous step. The triples are written in <a href="https://www.w3.org/TR/turtle/" target="_blank">Turtle</a>, a plain-text format for RDF.</p>
+    <h2>How the triples were checked</h2>
+    <ul>
+    <li><strong>Syntax:</strong> every answer was parsed with <a href="https://rdflib.readthedocs.io" target="_blank">rdflib</a>, a Python library for RDF. If the parser can read the code and build the graph, the syntax is correct.</li>
+    <li><strong>Ontology:</strong> every property and class used by the models was checked against the <a href="https://github.com/ICCD-MiBACT/ArCo/blob/master/ArCo-release/ontologie/context-description/context-description.owl" target="_blank">official file of ArCo's Context Description ontology</a>, to make sure it exists and is used with the right subject and object.</li>
+    <li><strong>Content:</strong> the facts were compared with the description of the Tempio published by the <a href="https://www.comune.rimini.it/vivere-il-comune/luoghi/edificio-di-culto/tempio-malatestiano" target="_blank">Municipality of Rimini</a>.</li>
+    </ul>
+    <p>The table summarises the results of the syntax and ontology checks for all the answers and for the final triples, which are discussed in detail below.</p>
+    <p><img src="images/rdf-validation.png" alt="Validation of the RDF triples" /></p>
+    <p><em>The parser counts RDF statements: besides the three main triples, the final file also declares the type and the label of the new resources (the architect, the patron and the commission), for a total of nine statements.</em></p>
+    <h2>Triple 1 – Authorship (zero-shot)</h2>
+    <p><strong>Prompt:</strong></p>
+    <pre class="code prompt-text"><code>Agisci come uno specialista di Web Semantico ed ontologie ArCo.
+Trasforma la seguente frase in triple RDF in formato Turtle:
+&quot;L&#39;autore del Tempio Malatestiano è Leon Battista Alberti.&quot;
+- IRI del Tempio Malatestiano: &lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+- Usa la proprietà a-cd:hasAuthor
+- Crea un IRI esplicito per Leon Battista Alberti (non un nodo anonimo), di tipo l0:Agent, con rdfs:label in italiano
+- Dichiara i prefissi necessari</code></pre>
+    <p><em>Translation: "Act as a Semantic Web and ArCo ontology specialist. Turn the following sentence into RDF triples in Turtle format: 'The author of the Tempio Malatestiano is Leon Battista Alberti.' Use the IRI of the Tempio, the property a-cd:hasAuthor, and create an explicit IRI for Leon Battista Alberti (not a blank node), of type l0:Agent, with an Italian rdfs:label. Declare the necessary prefixes."</em></p>
+    <h3>Gemini</h3>
+    <pre class="code"><code>@prefix a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt; .
+@prefix l0: &lt;https://w3id.org/italia/onto/l0/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix arco-res: &lt;https://w3id.org/arco/resource/&gt; .
+
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasAuthor arco-res:Agent/leon-battista-alberti .
+
+arco-res:Agent/leon-battista-alberti
+    a l0:Agent ;
+    rdfs:label &quot;Leon Battista Alberti&quot;@it .</code></pre>
+    <h3>ChatGPT</h3>
+    <pre class="code"><code>@prefix a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt; .
+@prefix l0: &lt;https://w3id.org/italia/onto/l0/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasAuthor &lt;https://w3id.org/people/LeonBattistaAlberti&gt; .
+
+&lt;https://w3id.org/people/LeonBattistaAlberti&gt;
+    a l0:Agent ;
+    rdfs:label &quot;Leon Battista Alberti&quot;@it .</code></pre>
+    <h3>Considerations</h3>
+    <ul>
+    <li><strong>Gemini's code contains a syntax error.</strong> To shorten the IRI of the architect it declared the prefix arco-res: and wrote arco-res:Agent/leon-battista-alberti. In Turtle a slash (/) is not allowed in the local part of a prefixed name without escaping it, so the validator stopped at that line and the code could not be read. The rest of the modelling (property, class, label) was correct, and the IRI followed ArCo's naming pattern (…/resource/Agent/…).</li>
+    <li><strong>ChatGPT's code is syntactically valid,</strong> but it placed the architect in an invented namespace (https://w3id.org/people/) unrelated to ArCo. ChatGPT pointed this out itself, noting that the IRI was created for the example and is not an official ArCo identifier.</li>
+    <li>Neither answer could be used as it was. For the final triple I kept Gemini's IRI, which follows ArCo's pattern, and wrote it in full between angle brackets, which removes the syntax error.</li>
+    </ul>
+    <h2>Triple 2 – Commission (few-shot)</h2>
+    <p>In ArCo a commission is not a direct link between a work and a person: it is an intermediate node of type a-cd:Commission, connected to the cultural property and to the patron. In the prompt I described this pattern but did not name the property linking the commission to the patron, to see whether the models knew the ontology.</p>
+    <p><strong>Prompt:</strong></p>
+    <pre class="code prompt-text"><code>Agisci come uno specialista di Web Semantico ed ontologie ArCo.
+
+ESEMPIO:
+@prefix a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix l0: &lt;https://w3id.org/italia/onto/l0/&gt; .
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasAuthor &lt;https://w3id.org/arco/resource/Agent/leon-battista-alberti&gt; .
+&lt;https://w3id.org/arco/resource/Agent/leon-battista-alberti&gt;
+    a l0:Agent ;
+    rdfs:label &quot;Leon Battista Alberti&quot;@it .
+
+TASK:
+Basandoti sull&#39;esempio, trasforma la seguente frase in triple RDF in formato Turtle:
+&quot;Il Tempio Malatestiano è stato commissionato da Sigismondo Pandolfo Malatesta.&quot;
+- Usa la proprietà a-cd:hasCommission
+- Segui il modello dell&#39;ontologia ArCo, in cui la committenza è rappresentata da un nodo intermedio di tipo a-cd:Commission collegato al committente
+- Crea IRI espliciti per la committenza e per Sigismondo Pandolfo Malatesta (l0:Agent, con rdfs:label in italiano)</code></pre>
+    <p><em>Translation of the task: "Based on the example, turn the following sentence into RDF triples in Turtle format: 'The Tempio Malatestiano was commissioned by Sigismondo Pandolfo Malatesta.' Use the property a-cd:hasCommission; follow the ArCo model, in which the commission is an intermediate node of type a-cd:Commission linked to the patron; create explicit IRIs for the commission and for Sigismondo Pandolfo Malatesta (l0:Agent, with an Italian rdfs:label)."</em></p>
+    <h3>Gemini</h3>
+    <pre class="code"><code>&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasCommission &lt;https://w3id.org/arco/resource/Commission/0800163046-commission-1&gt; .
+
+&lt;https://w3id.org/arco/resource/Commission/0800163046-commission-1&gt;
+    a a-cd:Commission ;
+    a-cd:hasCommittent &lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt; .
+
+&lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt;
+    a l0:Agent ;
+    rdfs:label &quot;Sigismondo Pandolfo Malatesta&quot;@it .</code></pre>
+    <h3>ChatGPT</h3>
+    <pre class="code"><code>&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasCommission &lt;https://w3id.org/arco/resource/Commission/commission-sigismondo-pandolfo-malatesta&gt; .
+
+&lt;https://w3id.org/arco/resource/Commission/commission-sigismondo-pandolfo-malatesta&gt;
+    a a-cd:Commission ;
+    a-cd:hasAgent &lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt; .
+
+&lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt;
+    a l0:Agent ;
+    rdfs:label &quot;Sigismondo Pandolfo Malatesta&quot;@it .</code></pre>
+    <p><em>(Prefix declarations omitted: they are the same as in the example.)</em></p>
+    <h3>Considerations</h3>
+    <ul>
+    <li>Both answers are syntactically valid and both modelled the commission as an intermediate node, as requested.</li>
+    <li><strong>Gemini</strong> used a-cd:hasCommittent, the correct property: in ArCo's ontology it links a Commission to an l0:Agent, exactly as in Gemini's code. It also built the IRI of the commission from the catalogue code of the monument (0800163046-commission-1), following ArCo's naming pattern.</li>
+    <li><strong>ChatGPT</strong> used a-cd:hasAgent, which does not exist in the Context Description module. The code is valid Turtle, but the triple uses a property that ArCo does not define: a syntax validator cannot detect this kind of error, which only emerged from checking the ontology.</li>
+    <li>In an earlier test with a different prompt, Gemini had linked Sigismondo directly to the Tempio through a-cd:isCommissionedBy, another property that does not exist in ArCo. Describing the intermediate node in the prompt was therefore decisive for obtaining a correct model.</li>
+    </ul>
+    <h2>Triple 3 – Description (few-shot)</h2>
+    <p>For the description I gave the models the two previous triples as examples and listed only the facts confirmed by the Municipality of Rimini, so that the text would not include unverified information.</p>
+    <p><strong>Prompt:</strong></p>
+    <pre class="code prompt-text"><code>Agisci come uno specialista di Web Semantico ed ontologie ArCo.
+
+ESEMPIO 1 (autore):
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasAuthor &lt;https://w3id.org/arco/resource/Agent/leon-battista-alberti&gt; .
+
+ESEMPIO 2 (committenza):
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasCommission &lt;https://w3id.org/arco/resource/Commission/0800163046-commission-1&gt; .
+&lt;https://w3id.org/arco/resource/Commission/0800163046-commission-1&gt;
+    a a-cd:Commission ;
+    a-cd:hasCommittent &lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt; .
+
+TASK:
+Basandoti sugli esempi, crea una tripla RDF in formato Turtle che aggiunga al Tempio Malatestiano una descrizione storico-artistica, usando la proprietà rdfs:comment con un testo in italiano (@it) di 2-3 frasi.
+La descrizione deve contenere SOLO queste informazioni:
+- progettato da Leon Battista Alberti, che si ispirò all&#39;Arco d&#39;Augusto e al Ponte di Tiberio
+- commissionato da Sigismondo Pandolfo Malatesta come monumento alla propria famiglia
+- lavori iniziati nel 1447 e rimasti incompiuti alla morte di Sigismondo nel 1468
+- decorazioni di Agostino di Duccio e Matteo de&#39; Pasti, Crocifisso di Giotto, affresco di Piero della Francesca
+Dichiara i prefissi necessari.</code></pre>
+    <p><em>Translation of the task: "Based on the examples, create an RDF triple in Turtle format that adds a historical and artistic description to the Tempio Malatestiano, using rdfs:comment with an Italian text (@it) of 2–3 sentences. The description must contain ONLY this information: designed by Leon Battista Alberti, inspired by the Arch of Augustus and the Bridge of Tiberius; commissioned by Sigismondo Pandolfo Malatesta as a monument to his family; works begun in 1447 and still unfinished at Sigismondo's death in 1468; decorations by Agostino di Duccio and Matteo de' Pasti, Crucifix by Giotto, fresco by Piero della Francesca. Declare the necessary prefixes."</em></p>
+    <h3>Gemini</h3>
+    <pre class="code"><code>@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    rdfs:comment &quot;Commissionato da Sigismondo Pandolfo Malatesta come monumento alla propria famiglia, il Tempio Malatestiano fu progettato da Leon Battista Alberti, che si ispirò all&#39;Arco d&#39;Augusto e al Ponte di Tiberio. I lavori iniziarono nel 1447 e rimasero incompiuti alla morte di Sigismondo nel 1468. L&#39;edificio custodisce le decorazioni di Agostino di Duccio e Matteo de&#39; Pasti, il Crocifisso di Giotto e un affresco di Piero della Francesca.&quot;@it .</code></pre>
+    <h3>ChatGPT</h3>
+    <pre class="code"><code>@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    rdfs:comment &quot;Il Tempio Malatestiano fu progettato da Leon Battista Alberti, che si ispirò all&#39;Arco d&#39;Augusto e al Ponte di Tiberio, e commissionato da Sigismondo Pandolfo Malatesta come monumento alla propria famiglia. I lavori iniziarono nel 1447 e rimasero incompiuti alla morte di Sigismondo nel 1468. Le decorazioni furono realizzate da Agostino di Duccio e Matteo de&#39; Pasti; l&#39;edificio custodisce inoltre un Crocifisso di Giotto e un affresco di Piero della Francesca.&quot;@it .</code></pre>
+    <h3>Considerations</h3>
+    <ul>
+    <li>Both answers are syntactically valid, declare only the prefix they need (rdfs:) and respect all the constraints: three sentences, Italian language tag, and only the facts listed in the prompt, with nothing added.</li>
+    <li>The two texts differ only in the order of the information: Gemini opens with the commission, while ChatGPT follows the order of the list in the prompt. For the final triple I chose ChatGPT's version, which opens with the subject of the sentence, the Tempio, and reads more naturally as a catalogue description.</li>
+    <li>With a precise list of facts, the task became a controlled rewriting, and both models performed equally well.</li>
+    </ul>
+    <h2>Results</h2>
+    <table>
+    <thead>
+    <tr>
+    <th>Triple</th>
+    <th>Gemini</th>
+    <th>ChatGPT</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><strong>1. Authorship (zero-shot)</strong></td>
+    <td>❌ Syntax error (slash in a prefixed name); IRI consistent with ArCo</td>
+    <td>✅ Valid syntax; ⚠️ invented namespace outside ArCo</td>
+    </tr>
+    <tr>
+    <td><strong>2. Commission (few-shot)</strong></td>
+    <td>✅ Valid syntax; ✅ correct ArCo property (a-cd:hasCommittent)</td>
+    <td>✅ Valid syntax; ❌ non-existent property (a-cd:hasAgent)</td>
+    </tr>
+    <tr>
+    <td><strong>3. Description (few-shot)</strong></td>
+    <td>✅ Valid; all constraints respected</td>
+    <td>✅ Valid; all constraints respected</td>
+    </tr>
+    </tbody>
+    </table>
+    <p>Gemini showed a better knowledge of ArCo's ontology and naming conventions, but made a syntax error in the only zero-shot prompt. ChatGPT always produced valid Turtle and was transparent about the limits of its choices, but it used a property that does not exist in ArCo. The few-shot examples improved the results of both models: after seeing a correct triple, neither repeated a syntax error.</p>
+    <p>The most important lesson is that syntax and meaning must be checked separately. A validator confirms that the code can be read, but only a comparison with the ontology shows whether the properties exist and are used correctly.</p>
+    <h2>The final triples</h2>
+    <p>Combining the correct parts of the two models' answers, I obtained the final enrichment for the Tempio Malatestiano. The code passed the syntax check, and all its properties and classes are defined in ArCo.</p>
+    <pre class="code"><code>@prefix a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt; .
+@prefix l0: &lt;https://w3id.org/italia/onto/l0/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+# Triple 1 – Authorship
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasAuthor &lt;https://w3id.org/arco/resource/Agent/leon-battista-alberti&gt; .
+
+&lt;https://w3id.org/arco/resource/Agent/leon-battista-alberti&gt;
+    a l0:Agent ;
+    rdfs:label &quot;Leon Battista Alberti&quot;@it .
+
+# Triple 2 – Commission
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    a-cd:hasCommission &lt;https://w3id.org/arco/resource/Commission/0800163046-commission-1&gt; .
+
+&lt;https://w3id.org/arco/resource/Commission/0800163046-commission-1&gt;
+    a a-cd:Commission ;
+    a-cd:hasCommittent &lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt; .
+
+&lt;https://w3id.org/arco/resource/Agent/sigismondo-pandolfo-malatesta&gt;
+    a l0:Agent ;
+    rdfs:label &quot;Sigismondo Pandolfo Malatesta&quot;@it .
+
+# Triple 3 – Description
+&lt;https://w3id.org/arco/resource/ArchitecturalOrLandscapeHeritage/0800163046&gt;
+    rdfs:comment &quot;Il Tempio Malatestiano fu progettato da Leon Battista Alberti, che si ispirò all&#39;Arco d&#39;Augusto e al Ponte di Tiberio, e commissionato da Sigismondo Pandolfo Malatesta come monumento alla propria famiglia. I lavori iniziarono nel 1447 e rimasero incompiuti alla morte di Sigismondo nel 1468. Le decorazioni furono realizzate da Agostino di Duccio e Matteo de&#39; Pasti; l&#39;edificio custodisce inoltre un Crocifisso di Giotto e un affresco di Piero della Francesca.&quot;@it .</code></pre>
+    <p><em>Translation of the description: "The Tempio Malatestiano was designed by Leon Battista Alberti, who was inspired by the Arch of Augustus and the Bridge of Tiberius, and commissioned by Sigismondo Pandolfo Malatesta as a monument to his family. The works began in 1447 and were still unfinished at Sigismondo's death in 1468. The decorations were made by Agostino di Duccio and Matteo de' Pasti; the building also houses a Crucifix by Giotto and a fresco by Piero della Francesca."</em></p>
+    <div class="box note">
+    <p>The final triples can be downloaded as a Turtle file: <a href="data/Tempio_Malatestiano_enrichment.ttl">Tempio_Malatestiano_enrichment.ttl</a>.</p>
+    </div>
+    <h3>Summary</h3>
+    <table>
+    <thead>
+    <tr>
+    <th>Subject</th>
+    <th>Predicate</th>
+    <th>Object</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><strong>Tempio Malatestiano (0800163046)</strong></td>
+    <td>a-cd:hasAuthor</td>
+    <td>Leon Battista Alberti (IRI, l0:Agent)</td>
+    </tr>
+    <tr>
+    <td><strong>Tempio Malatestiano (0800163046)</strong></td>
+    <td>a-cd:hasCommission</td>
+    <td>Commission 0800163046-commission-1 (IRI, a-cd:Commission)</td>
+    </tr>
+    <tr>
+    <td><strong>Commission 0800163046-commission-1</strong></td>
+    <td>a-cd:hasCommittent</td>
+    <td>Sigismondo Pandolfo Malatesta (IRI, l0:Agent)</td>
+    </tr>
+    <tr>
+    <td><strong>Tempio Malatestiano (0800163046)</strong></td>
+    <td>rdfs:comment</td>
+    <td>Historical and artistic description (literal, @it)</td>
+    </tr>
+    </tbody>
+    </table>
+    <p>Since I cannot write directly into ArCo's official database, which is managed by the Ministry of Culture, the triples are published as a Turtle file. Loaded together with ArCo's data, they add the missing links and description to the record of the Tempio Malatestiano, because they use the monument's official IRI and ArCo's own properties.</p>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <a href="prompts.html">&larr; LLM Prompts</a>
+      <a href="challenges.html">Challenges &amp; Solutions &rarr;</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>

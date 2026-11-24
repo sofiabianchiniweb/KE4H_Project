@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Prompts &ndash; Tempio Malatestiano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="sparql.html">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html" class="active">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>LLM Prompts</h1>
+
+    <p>After identifying the gap, I used two LLMs, <a href="https://chatgpt.com" target="_blank">ChatGPT</a> and <a href="https://gemini.google.com" target="_blank">Gemini</a>, to research the missing knowledge about the Tempio Malatestiano. At this stage the goal was to collect and compare information, not yet to produce RDF: the generation of triples is described on the next page, <a href="rdf-triples.html">Filling the Gaps: RDF Triples</a>. Keeping the two steps separate allowed me to evaluate how each prompting technique affects the content of the answers.</p>
+    <p>I submitted exactly the same prompts to both models, so that their answers could be compared. The prompts were written in Italian; an English translation is given below each one.</p>
+    <p>The answers were very long, so for each prompt I report a short excerpt of both answers, chosen among the passages most relevant to my gap or to the evaluation; the complete conversations can be read through the links below each prompt.</p>
+    <h2>Prompting techniques</h2>
+    <ul>
+    <li><strong>Zero-shot:</strong> the model receives a request without any example and relies only on its general knowledge.</li>
+    <li><strong>Few-shot:</strong> the model receives one or more examples showing the expected depth, style or format before the actual request.</li>
+    <li><strong>Chain-of-thought:</strong> the model is guided through a sequence of reasoning steps before reaching a final synthesis.</li>
+    </ul>
+    <h2>Prompt 1 – Zero-shot: a general description</h2>
+    <p>I started with the simplest possible request, to see what each model knows about the monument without any guidance.</p>
+    <p><strong>Prompt:</strong></p>
+    <div class="box prompt">
+    <p>Descrivi il Tempio Malatestiano</p>
+    </div>
+    <p><em>Translation: "Describe the Tempio Malatestiano."</em></p>
+    <h3>Gemini (excerpt)</h3>
+    <blockquote>
+    <p><em>«Il Tempio Malatestiano, cattedrale di Rimini dedicata a Santa Colomba, è uno dei massimi capolavori del Rinascimento italiano. Voluto intorno al 1450 da Sigismondo Pandolfo Malatesta, signore della città, nacque per trasformare la preesistente chiesa gotica di San Francesco in un mausoleo dinastico e celebrativo. […] Leon Battista Alberti progettò un involucro marmoreo classico che inglobasse la struttura medievale senza demolirla.»</em></p>
+    <p>Translation: "The Tempio Malatestiano, the cathedral of Rimini dedicated to Saint Colomba, is one of the greatest masterpieces of the Italian Renaissance. Commissioned around 1450 by Sigismondo Pandolfo Malatesta, lord of the city, it was meant to transform the existing Gothic church of San Francesco into a dynastic and celebratory mausoleum. […] Leon Battista Alberti designed a classical marble shell enclosing the medieval structure without demolishing it."</p>
+    </blockquote>
+    <h3>ChatGPT (excerpt)</h3>
+    <blockquote>
+    <p><em>«La trasformazione in un monumento celebrativo della famiglia Malatesta fu voluta da Sigismondo Pandolfo Malatesta, signore di Rimini, che affidò il progetto all'architetto e umanista Leon Battista Alberti intorno al 1450. […] La facciata, realizzata in pietra d'Istria, si ispira chiaramente all'architettura romana imperiale. Alberti riprende in particolare il modello dell'arco trionfale, richiamando l'Arco di Augusto presente nella stessa città.»</em></p>
+    <p>Translation: "The transformation into a monument celebrating the Malatesta family was commissioned by Sigismondo Pandolfo Malatesta, lord of Rimini, who entrusted the project to the architect and humanist Leon Battista Alberti around 1450. […] The façade, made of Istrian stone, is clearly inspired by imperial Roman architecture. Alberti takes up in particular the model of the triumphal arch, recalling the Arch of Augustus in the same city."</p>
+    </blockquote>
+    <p><strong>Full answers:</strong> <a href="https://share.gemini.google/63Qz8RvURaIT" target="_blank">Gemini conversation</a> · <a href="https://chatgpt.com/share/6b05f8b4-8888-83ed-a601-8749a3dcb731" target="_blank">ChatGPT conversation</a>.</p>
+    <h3>Considerations</h3>
+    <ul>
+    <li>Both models recognised the monument and identified the two key figures of my gap: Leon Battista Alberti as the designer of the exterior and Sigismondo Pandolfo Malatesta as the patron. Both also gave the correct dedication of the cathedral, to Saint Colomba.</li>
+    <li>Both dated the project to around 1450, the period of Alberti's design. The official source I used for verification (see below) dates the beginning of the works to 1447.</li>
+    <li><strong>Gemini</strong> gave a short answer organised in sections, with an image. It added details that ChatGPT did not mention, such as the reuse of marbles taken from the basilica of Sant'Apollinare in Classe in Ravenna, the tomb of Isotta degli Atti supported by elephants (the Malatesta emblem) and the criticism of Pope Pius II, who described the building as full of pagan gods. Apart from the credit of an image taken from Wikipedia, it did not list any sources.</li>
+    <li><strong>ChatGPT</strong> gave a longer answer, describing the exterior, the main chapels and the artworks, including a work not mentioned by Gemini: Giorgio Vasari's altarpiece of Saint Francis receiving the stigmata (1548). It recalled the conflict with Pius II and ended with a list of sources: the Municipality of Rimini, the official website of the Tempio and Rimini Turismo.</li>
+    </ul>
+    <h2>Prompt 2 – Few-shot: an analytical description</h2>
+    <p>To obtain a deeper analysis, I gave the models an example of how Alberti's work can be described, using another of his buildings, Palazzo Rucellai in Florence, and asked for an analogous description of the Tempio.</p>
+    <p><strong>Prompt:</strong></p>
+    <div class="box prompt">
+    <p>Nel Palazzo Rucellai a Firenze, Leon Battista Alberti riscopre l'architettura classica romana sovrapponendo gli ordini sovrapposti (dorico, ionico, corinzio) sulla facciata, trasformando un palazzo privato in un manifesto dell'umanesimo fiorentino e del prestigio della famiglia Rucellai.</p>
+    <p>Così come nel suddetto esempio, descrivi in modo analogo il Tempio Malatestiano di Rimini: analizza come Leon Battista Alberti ha applicato il classicismo romano (Arco d'Augusto, Ponte di Tiberio), come il tempio fonda la celebrazione dinastica di Sigismondo Malatesta e l'amore per Isotta degli Atti con il simbolismo neoplatonico e zodiacale di Agostino di Duccio, le opere di Piero della Francesca, e di Giotto.</p>
+    </div>
+    <p><em>Translation: "In Palazzo Rucellai in Florence, Leon Battista Alberti rediscovers classical Roman architecture by superimposing the orders (Doric, Ionic, Corinthian) on the façade, turning a private palace into a manifesto of Florentine humanism and of the prestige of the Rucellai family. As in the example above, describe the Tempio Malatestiano of Rimini in the same way: analyse how Leon Battista Alberti applied Roman classicism (Arch of Augustus, Bridge of Tiberius), how the temple combines the dynastic celebration of Sigismondo Malatesta and his love for Isotta degli Atti with Agostino di Duccio's Neoplatonic and zodiac symbolism, and the works by Piero della Francesca and Giotto."</em></p>
+    <h3>Gemini (excerpt)</h3>
+    <blockquote>
+    <p><em>«Nel Tempio Malatestiano a Rimini, Leon Battista Alberti compie un'operazione analoga a quella di Palazzo Rucellai, ma su scala monumentale e sacra […]. Secondo la filosofia neoplatonica dell'umanista Basinio da Parma, ideatore del programma iconografico, questo percorso visivo rappresenta l'ascesa dell'anima umana.»</em></p>
+    <p>Translation: "In the Tempio Malatestiano in Rimini, Leon Battista Alberti carries out an operation similar to that of Palazzo Rucellai, but on a monumental and sacred scale […]. According to the Neoplatonic philosophy of the humanist Basinio da Parma, who conceived the iconographic programme, this visual path represents the ascent of the human soul."</p>
+    </blockquote>
+    <h3>ChatGPT (excerpt)</h3>
+    <blockquote>
+    <p><em>«Il riferimento principale è l'Arco di Augusto, dal quale Alberti riprende il motivo dell'arco trionfale […]. Un ulteriore riferimento è il Ponte di Tiberio, riconoscibile nel ritmo delle arcate […]. È tuttavia opportuno precisare che il programma iconografico non costituisce una traduzione sistematica della filosofia neoplatonica.»</em></p>
+    <p>Translation: "The main reference is the Arch of Augustus, from which Alberti takes the motif of the triumphal arch […]. A further reference is the Bridge of Tiberius, recognisable in the rhythm of the arches […]. It should be noted, however, that the iconographic programme is not a systematic translation of Neoplatonic philosophy."</p>
+    </blockquote>
+    <p><strong>Full answers:</strong> <a href="https://share.gemini.google/63Qz8RvURaIT" target="_blank">Gemini conversation</a> · <a href="https://chatgpt.com/share/6b05f535-88c8-83eb-86d2-096632ca50b0" target="_blank">ChatGPT conversation</a>.</p>
+    <h3>Considerations</h3>
+    <ul>
+    <li>The example worked: both models moved from a general description to an analysis that links architectural forms to the patron's political goals, as in the Palazzo Rucellai sentence. Gemini opened with an explicit comparison with Palazzo Rucellai, while ChatGPT ended with one.</li>
+    <li><strong>Gemini</strong> added many specific details: the Latin inscription on the façade, dated 1450, which names Sigismondo as the builder; the sarcophagi of the humanists of Sigismondo's court placed along the sides; and, in Piero della Francesca's fresco, Castel Sismondo and the two greyhounds at Sigismondo's feet. However, it presented some interpretations as facts: for example, it stated that the humanist Basinio da Parma conceived the iconographic programme of the chapels and that the reliefs represent the ascent of the soul, without saying that these are scholarly interpretations.</li>
+    <li><strong>ChatGPT</strong> covered the same elements in a clear order: the Arch of Augustus as the model of the façade, the Bridge of Tiberius for the rhythm of the arches, the tomb of Isotta in the Chapel of the Angels, the zodiac sign of Cancer linked to Sigismondo, Piero's fresco (1451) and Giotto's Crucifix (about 1300). It was more cautious, warning that the Neoplatonic reading of the decoration is only one possible interpretation, and it listed its sources, including Treccani.</li>
+    <li>Gemini stood out for the number of details, ChatGPT for the care in separating facts from interpretations.</li>
+    </ul>
+    <h2>Prompt 3 – Chain-of-thought: a step-by-step analysis</h2>
+    <p>Finally, I guided the models through a sequence of steps, from the historical context of the commission to a comparison with other works, so that the final evaluation would be built on the previous points.</p>
+    <p><strong>Prompt:</strong></p>
+    <div class="box prompt">
+    <p>Analizza il Tempio Malatestiano di Rimini attenendoti a questi step:</p>
+    <ol>
+    <li>Analizza accuratamente il contesto storico-sociale in cui è stato commissionato il Tempio da parte di Malatesta a Leon Battista Alberti</li>
+    <li>Spiega come Leon Battista Alberti ha realizzato gli esterni: lo stile, i simboli, i significati</li>
+    <li>Fai lo stesso per gli interni</li>
+    <li>Interpreta i simboli ed i significati contenuti all'interno e all'esterno dell'edificio</li>
+    <li>Inserisci l'opera nel suo contesto storico, culturale e sociale</li>
+    <li>Confronta il Tempio con altre opere presumibilmente similari in termini di contesto storico, artistico e sociale. Ci sono analogie o differenze? Cosa rende unica questa opera?</li>
+    <li>Rispondi seguendo l'ordine dei punti e con uno stile chiaro e descrittivo</li>
+    </ol>
+    </div>
+    <p><em>Translation: "Analyse the Tempio Malatestiano of Rimini following these steps: 1. Analyse the historical and social context in which Malatesta commissioned the Tempio from Leon Battista Alberti. 2. Explain how Alberti designed the exterior: style, symbols, meanings. 3. Do the same for the interior. 4. Interpret the symbols and meanings inside and outside the building. 5. Place the work in its historical, cultural and social context. 6. Compare the Tempio with similar works in terms of historical, artistic and social context: are there similarities or differences? What makes this work unique? 7. Answer following the order of the points, in a clear and descriptive style."</em></p>
+    <h3>Gemini (excerpt)</h3>
+    <blockquote>
+    <p><em>«Intorno al 1447–1450, nel momento di massimo apogeo politico ed economico […], Sigismondo decide di trasformare l'antica chiesa gotica di San Francesco — tradizionale luogo di sepoltura della sua famiglia — in un monumento celebrativo della propria casata e della propria persona. […] L'opera si interrompe bruscamente intorno al 1460-1462 a causa del crollo politico di Sigismondo, sconfitto e scomunicato da papa Pio II Piccolomini.»</em></p>
+    <p>Translation: "Around 1447–1450, at the height of his political and economic power […], Sigismondo decides to transform the old Gothic church of San Francesco, the traditional burial place of his family, into a monument celebrating his house and himself. […] The work stops abruptly around 1460–1462 because of Sigismondo's political collapse, defeated and excommunicated by Pope Pius II Piccolomini."</p>
+    </blockquote>
+    <h3>ChatGPT (excerpt)</h3>
+    <div class="box todo">
+    <p><strong>To be completed:</strong> Add ChatGPT's answer to this prompt: run it in the same ChatGPT chat and update the share link</p>
+    </div>
+    <p><strong>Full answers:</strong> <a href="https://share.gemini.google/63Qz8RvURaIT" target="_blank">Gemini conversation</a> · <a href="https://chatgpt.com/share/6b05f535-88c8-83eb-86d2-096632ca50b0" target="_blank">ChatGPT conversation</a>.</p>
+    <h3>Considerations</h3>
+    <ul>
+    <li>Gemini followed the seven steps in order and produced its longest and most structured answer. The dates it gave are consistent with the official source: the start of the works around 1447–1450 (with the interior works begun in 1447) and their interruption around 1460–1462, after Sigismondo's defeat and excommunication by Pius II. It also quoted the passage of Pius II's Commentaries in which the Pope describes the Tempio as a temple of "infidel worshippers of demons".</li>
+    <li>In step 6, Gemini compared the Tempio with three works: Palazzo Rucellai in Florence and the Basilica of Sant'Andrea in Mantua, both by Alberti, and the Colleoni Chapel in Bergamo, the mausoleum of another condottiero, built by Giovanni Antonio Amadeo in the 1470s. The choice is relevant and the attributions are correct.</li>
+    <li>There are, however, two imprecisions. Gemini wrote that Palazzo Rucellai shares with the Tempio the use of superimposed classical orders, while the façade of the Tempio is based on the model of the triumphal arch, as Gemini itself explains in step 2. It also repeated, as a fact, that Basinio da Parma conceived the iconographic programme.</li>
+    </ul>
+    <div class="box todo">
+    <p><strong>To be completed:</strong> Add the considerations on ChatGPT's answer</p>
+    </div>
+    <h2>What the prompts revealed about the gap</h2>
+    <p>Across all prompts and both models, the information related to my gap was consistent:</p>
+    <ul>
+    <li><strong>Authorship:</strong> Leon Battista Alberti designed the classical exterior that encloses the earlier Franciscan church.</li>
+    <li><strong>Commission:</strong> Sigismondo Pandolfo Malatesta commissioned the transformation of the church into a monument celebrating himself, his dynasty and Isotta degli Atti.</li>
+    <li><strong>Context:</strong> the reliefs by Agostino di Duccio, the fresco by Piero della Francesca and the Crucifix by Giotto, together with the controversy with Pope Pius II, form the historical and artistic context of the monument.</li>
+    </ul>
+    <h2>Cross-check with an official source</h2>
+    <p>Before using these facts for the RDF triples, I verified them against the description of the monument published by the <a href="https://www.comune.rimini.it/vivere-il-comune/luoghi/edificio-di-culto/tempio-malatestiano" target="_blank">Municipality of Rimini</a>. The page confirms that:</p>
+    <ul>
+    <li>the Tempio was designed by Leon Battista Alberti, whose façade and sides recall the Arch of Augustus and the Bridge of Tiberius;</li>
+    <li>it was commissioned by Sigismondo Pandolfo Malatesta, lord of Rimini from 1432 to 1468, as a monument to the Malatesta family;</li>
+    <li>the works began in 1447, including a burial chapel for Sigismondo and Isotta degli Atti, his third wife;</li>
+    <li>the marble decoration of the side chapels is by Agostino di Duccio and Matteo de' Pasti, and the Crucifix by Giotto is his only work in Rimini;</li>
+    <li>the building was still unfinished when Sigismondo died in 1468.</li>
+    </ul>
+    <p>The two facts selected for the enrichment, authorship and commission, are therefore confirmed by an official source, independently of the LLMs.</p>
+    <h2>General considerations</h2>
+    <table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>ChatGPT</th>
+    <th>Gemini</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><strong>Structure</strong></td>
+    <td>Long answers with clear sections that follow the order of the prompt</td>
+    <td>Shorter, schematic answers with sections and images</td>
+    </tr>
+    <tr>
+    <td><strong>Level of detail</strong></td>
+    <td>Rich and well organised, with data close to the official source</td>
+    <td>Very high, with many specific names, dates and places</td>
+    </tr>
+    <tr>
+    <td><strong>Sources</strong></td>
+    <td>Lists its sources: Municipality of Rimini, official website of the Tempio, Rimini Turismo, Treccani</td>
+    <td>No list of sources (only the credit of an image from Wikipedia)</td>
+    </tr>
+    <tr>
+    <td><strong>Caution</strong></td>
+    <td>Separates documented facts from interpretations</td>
+    <td>Presents some interpretations as facts</td>
+    </tr>
+    <tr>
+    <td><strong>Imprecisions found</strong></td>
+    <td>No clear errors found in prompts 1 and 2</td>
+    <td>Basinio da Parma presented as the certain author of the iconographic programme; superimposed orders wrongly attributed to the Tempio (chain-of-thought)</td>
+    </tr>
+    </tbody>
+    </table>
+    <div class="box todo">
+    <p><strong>To be completed:</strong> Complete the ChatGPT column after adding its chain-of-thought answer</p>
+    </div>
+    <p>These answers come from a second run of the prompts. In an earlier test run, the same prompts produced different answers and some clear factual errors: for example, Gemini attributed the Pazzi Chapel in Florence to Alberti (it is attributed to Brunelleschi), and ChatGPT described the cathedral as dedicated to Saint Francis. This shows that the answers of an LLM can change from one run to another.</p>
+    <p>Overall, Gemini was more useful for discovering details, while ChatGPT was more reliable in distinguishing facts from interpretations. In both cases, more structured prompts produced richer answers, but not necessarily more accurate ones: every fact used for the enrichment had to be verified against an independent source.</p>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <a href="sparql.html">&larr; SPARQL Queries &amp; Results</a>
+      <a href="rdf-triples.html">Filling the Gaps: RDF Triples &rarr;</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>

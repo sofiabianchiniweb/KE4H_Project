@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenges &amp; Solutions &ndash; Tempio Malatestiano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SIDEBAR MENU: the same on every page -->
+  <aside class="sidebar">
+    <a href="index.html">
+      <img class="avatar" src="images/avatar-tempio.jpg" alt="Tempio Malatestiano">
+    </a>
+    <p class="site-title">Tempio Malatestiano</p>
+    <p class="site-subtitle">Enriching ArCo with SPARQL and LLMs</p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="sparql.html">SPARQL Queries &amp; Results</a></li>
+        <li><a href="prompts.html">LLM Prompts</a></li>
+        <li><a href="rdf-triples.html">Filling the Gaps: RDF Triples</a></li>
+        <li><a href="challenges.html" class="active">Challenges &amp; Solutions</a></li>
+        <li><a href="conclusions.html">Conclusions</a></li>
+      </ul>
+    </nav>
+
+    <p class="sidebar-link">
+      <a href="https://github.com/sofiabianchiniweb/KE4H_Project" target="_blank">GitHub repository</a>
+    </p>
+  </aside>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    <h1>Challenges &amp; Solutions</h1>
+
+    <p>I started this project without any background in programming or in Semantic Web technologies, so many steps were completely new to me. Below I describe the main difficulties I faced and how I dealt with them.</p>
+    <h2>1. Learning SPARQL from scratch</h2>
+    <p><strong>Challenge:</strong> at the beginning SPARQL looked like a foreign language. I did not know what prefixes were for, what a triple pattern was, or why some words started with a question mark. When I ran my first queries, I also did not understand why some information I expected did not appear: for example, in one of my first attempts the IRI of the Tempio was not shown in the results, because I had not included it in the SELECT line.</p>
+    <p><strong>Solution:</strong> I started from the examples in the course slides and built my queries step by step, adding one keyword at a time and checking what changed in the results. I learned that prefixes are abbreviations of long web addresses, that variables (the words with ?) work like empty boxes that SPARQL fills with the data it finds, and that SELECT decides which columns appear in the table.</p>
+    <h2>2. Understanding what my results meant</h2>
+    <p><strong>Challenge:</strong> reading the result tables was not easy. When Query 3 returned only rdf:type, I first thought I had made a mistake in the query; later, when Query 4 returned two author IRIs, I thought ArCo already recorded the architect of the Tempio, which would have meant there was no gap.</p>
+    <p><strong>Solution:</strong> I learned to read each row as a sentence made of subject, predicate and object, and to open the IRIs in the browser to see what they referred to. In this way I discovered that the two authors were 20th-century authors of drawings and documents about the Tempio, not its architect. I then queried the monument directly through its IRI (Queries 5 and 6), which gave me a clear answer about what was really missing.</p>
+    <h2>3. Error messages and a slow endpoint</h2>
+    <p><strong>Challenge:</strong> some queries did not work, and the error messages were hard to understand. My first version of Query 2 kept stopping with the message "Transaction timed out", even after trying for hours. Query 6 returned the error "Bad character '&amp;'", although I could not see any "&amp;" in my query.</p>
+    <p><strong>Solution:</strong> I found out that "Transaction timed out" means that the query is too heavy for the server: searching two names among all the labels in ArCo and then sorting the results took too long. I made the query lighter by searching only among architectural heritage records and, for "San Francesco", only among those in Rimini. The second error came from copying and pasting: the symbols <code>&lt;</code> and <code>&gt;</code> had been turned into <code>&amp;lt;</code> and <code>&amp;gt;</code>, their coded form used in web pages. Pasting the query again as plain text solved the problem.</p>
+    <h2>4. Understanding RDF, Turtle and what "enriching" means</h2>
+    <p><strong>Challenge:</strong> I did not know what the Turtle format was, and at first I did not understand whether I was really enriching ArCo, since I cannot write into its official database. It was also difficult to choose the right properties: some of them have very similar names, and the LLMs sometimes suggested properties that do not exist, such as a-cd:isCommissionedBy and a-cd:hasAgent.</p>
+    <p><strong>Solution:</strong> I learned that Turtle is simply a text format for writing RDF triples, and that an enrichment proposal is delivered as a file that can be loaded together with ArCo's data, as long as it uses ArCo's official IRIs and properties. To be sure that the properties existed, I checked them in the <a href="https://github.com/ICCD-MiBACT/ArCo/blob/master/ArCo-release/ontologie/context-description/context-description.owl" target="_blank">official file of ArCo's Context Description ontology</a>, where I found the correct one for the commission, a-cd:hasCommittent. I also checked the syntax of every answer with a Turtle validator, which found an error in one of Gemini's triples.</p>
+    <h2>5. Not trusting the LLMs blindly</h2>
+    <p><strong>Challenge:</strong> the answers of ChatGPT and Gemini were long, detailed and written in a very confident tone, so at first they all seemed correct. Comparing them, I noticed that they did not always agree, that the same prompt could give different answers in different runs, and that some statements were interpretations presented as facts or simply wrong.</p>
+    <p><strong>Solution:</strong> I always gave the same prompts to both models and compared their answers. Before using any information for my triples, I checked it against the official description of the Tempio published by the <a href="https://www.comune.rimini.it/vivere-il-comune/luoghi/edificio-di-culto/tempio-malatestiano" target="_blank">Municipality of Rimini</a>. In the prompt for the description triple, I listed only the verified facts and asked the models not to add anything else.</p>
+    <h2>6. Too much material for the website</h2>
+    <p><strong>Challenge:</strong> some results were too large to show on the website. The answers of the LLMs were several pages long, and the full record of the Tempio (Query 5) contained too many rows to fit in a single screenshot.</p>
+    <p><strong>Solution:</strong> for each prompt I selected short excerpts of the answers, choosing the passages most relevant to my gap, and added links to the complete conversations. For Query 5, I added a link to the full list of results on the ArCo endpoint.</p>
+
+    <!-- Links to the previous and next page -->
+    <div class="page-nav">
+      <a href="rdf-triples.html">&larr; Filling the Gaps: RDF Triples</a>
+      <a href="conclusions.html">Conclusions &rarr;</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Sofia Bianchini &ndash; KE4H Project, University of Bologna
+    </footer>
+  </main>
+
+</body>
+</html>
