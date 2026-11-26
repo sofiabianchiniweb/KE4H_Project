@@ -11,7 +11,7 @@ body {
   font-size: 17px;
   line-height: 1.7;
   color: #000000;
-  background-color: #F7FAFF;
+  background-color: #0056b2;
 }
 
 a {
@@ -52,7 +52,7 @@ a:hover {
   margin: 15px 0 0 0;
   font-size: 22px;
   font-weight: bold;
-  color: #000000;
+  color: #2a2a2a;
 }
 
 .site-subtitle {
